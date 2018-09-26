@@ -1,0 +1,12 @@
+<form (ngSubmit)="onUpdate(f)" #f="ngForm">
+  <div class="form-group">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Team {{index}}</span>
+      </div>
+      <input type="text" class="form-control" name="name" [ngModel]="team.name">
+      <input type="number" class="form-control" name="wins" [ngModel]="team.wins">
+      <button class="btn" type="submit" [disabled]="f.untouched">Apply</button>
+    </div>
+  </div>
+</form>
