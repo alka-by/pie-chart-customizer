@@ -9,6 +9,7 @@ import { PiePlainChartComponent } from './pie-plain-chart/pie-plain-chart.compon
 import { PieTdChartComponent } from './pie-td-chart/pie-td-chart.component';
 import { TeamsService } from './shared/teams.service';
 import { TeamConfigComponent } from './pie-config/team-config/team-config.component';
+import { ColorsService } from './shared/colors.service';
 
 @NgModule({
   declarations: [
@@ -18,13 +19,8 @@ import { TeamConfigComponent } from './pie-config/team-config/team-config.compon
     PieTdChartComponent,
     TeamConfigComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule
-
-  ],
-  providers: [TeamsService],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  providers: [TeamsService, ColorsService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

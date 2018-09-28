@@ -2,11 +2,11 @@
   <div class="form-group">
     <div class="input-group">
       <div class="input-group-prepend">
-        <span class="input-group-text">Team {{index}}</span>
+        <span class="input-group-text" [ngStyle]="{'background-color': color}">Team {{ index + 1 }}</span>
       </div>
-      <input type="text" class="form-control" name="name" [ngModel]="team.name">
-      <input type="number" class="form-control" name="wins" [ngModel]="team.wins">
-      <button class="btn" type="submit" [disabled]="f.untouched">Apply</button>
+      <input type="text" class="form-control" name="name" [ngModel]="team.name" (input)="onChangeName($event)">
+      <input type="number" class="form-control" name="wins" [ngModel]="team.wins" (input)="onChangeWins($event)" min="0">
+      <!-- <input type="text" name="color" [ngModel]="team.color"> -->
     </div>
   </div>
 </form>

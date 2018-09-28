@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Team } from '../../model/team.model';
 import { NgForm } from '@angular/forms';
 import { TeamsService } from '../../shared/teams.service';
@@ -9,19 +9,26 @@ import { TeamsService } from '../../shared/teams.service';
   styleUrls: ['./team-config.component.scss']
 })
 export class TeamConfigComponent implements OnInit {
+  @Input()
+  team: Team;
+  @Input()
+  index: number;
+  @Input()
+  color: string;
 
-  @Input() team: Team;
-  @Input() index: number;
+  constructor(private teamsService: TeamsService) {}
 
-  constructor(private teamsService: TeamsService) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onUpdate(form: NgForm) {
     this.teamsService.updateTeamInfo(this.index, form.value);
-    console.log(form);
-    console.log(this.team);
   }
 
+  onChangeName(event: Event) {
+    this.teamsService.updateTeamName(this.index, (<HTMLInputElement>event.target).value);
+  }
+
+  onChangeWins(event: Event) {
+    this.teamsService.updateTeamWins(this.index, +(<HTMLInputElement>event.target).value);
+  }
 }

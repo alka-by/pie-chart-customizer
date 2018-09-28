@@ -1,19 +1,12 @@
-<div class="panel-box" style="background-color: rgb(162, 235, 171); padding: 20px;">
-  <h2>{{title}}</h2>
-  <hr>
+<div class="panel-box" style="padding: 50px; text-align: center;">
+  <h2>{{ title }}</h2>
+  <br>
 
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-auto">
-      <app-team-config *ngFor="let team of teams; let i = index" [team]="team" [index]="i">
+      <app-team-config *ngFor="let team of teams; let i = index" [team]="team" [index]="i" [color]="colors[i]">
       </app-team-config>
     </div>
   </div>
 
-  <!-- <div class="row">
-      <div class="col-auto">
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Apply</button>
-        </div>
-      </div>
-    </div> -->
 </div>
