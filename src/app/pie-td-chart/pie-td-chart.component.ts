@@ -38,6 +38,7 @@ export class PieTdChartComponent implements OnInit, OnDestroy {
   teams: Team[];
   pieces: number[] = [];
   segments: THREE.Mesh[] = [];
+  planes: { plane1: THREE.Mesh; plane2: THREE.Mesh }[] = [];
 
   constructor(private colorsService: ColorsService, private teamsService: TeamsService) {}
 
@@ -58,6 +59,7 @@ export class PieTdChartComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       let shift = 0;
+      console.log('pieces: ', this.pieces);
       this.pieces.forEach((piece: number, index: number) => {
         // if (piece > 0) { } // optimization
         const geometry = new THREE.CylinderBufferGeometry(20, 20, 3, 50, 2, false, shift, piece);
@@ -69,9 +71,23 @@ export class PieTdChartComponent implements OnInit, OnDestroy {
           name: 'router-material1' + index
         });
         const cylinder = new THREE.Mesh(geometry, material);
+
+        const angle = shift + piece / 2;
+        this.setSegmentPosition(cylinder, angle);
+
+        const Pgeometry = new THREE.PlaneBufferGeometry(20, 3, 1, 1);
+        const plane1 = new THREE.Mesh(Pgeometry, material);
+        const plane2 = new THREE.Mesh(Pgeometry, material);
+        this.setPlanesPositionsAndRotations(shift, piece, plane1, plane2, cylinder);
+
+        this.planes.push({ plane1: plane1, plane2: plane2 });
+        this.scene.three.add(plane1);
+        this.scene.three.add(plane2);
+
         this.segments.push(cylinder);
         this.scene.three.add(cylinder);
         shift += piece;
+        console.log(cylinder);
       });
     }, 500);
 
@@ -79,6 +95,90 @@ export class PieTdChartComponent implements OnInit, OnDestroy {
       this.teams = teams;
       this.updateSegments();
     });
+
+    // const axesHelper = new THREE.AxesHelper(5);
+    // this.scene.three.add(axesHelper);
+  }
+
+  setSegmentPosition(cylinder: THREE.Mesh, angle: number) {
+    if (angle < Math.PI / 2) {
+      const x = 2 * Math.sin(angle);
+      const z = 2 * Math.cos(angle);
+      cylinder.position.set(x, 0, z);
+    }
+    if (angle >= Math.PI / 2 && angle < Math.PI) {
+      const z = 2 * Math.sin(angle - Math.PI / 2);
+      const x = 2 * Math.cos(angle - Math.PI / 2);
+      cylinder.position.set(x, 0, -z);
+    }
+    if (angle >= Math.PI && angle < (Math.PI / 2) * 3) {
+      const x = 2 * Math.sin(angle - Math.PI);
+      const z = 2 * Math.cos(angle - Math.PI);
+      cylinder.position.set(-x, 0, -z);
+    }
+    if (angle >= (Math.PI / 2) * 3) {
+      const z = 2 * Math.sin(angle - (Math.PI / 2) * 3);
+      const x = 2 * Math.cos(angle - (Math.PI / 2) * 3);
+      cylinder.position.set(-x, 0, z);
+    }
+  }
+
+  setPlanesPositionsAndRotations(shift, piece, plane1, plane2, cylinder) {
+    console.log();
+    const x = cylinder.position.x;
+    const y = cylinder.position.y;
+    const z = cylinder.position.z;
+    plane1.rotation.set(0, Math.PI / 2 + shift, 0);
+    if (shift < Math.PI / 2) {
+      plane1.position.set(x + 10 * Math.sin(shift), y, z + 10 * Math.cos(shift));
+    }
+    if (shift >= Math.PI / 2 && shift < Math.PI) {
+      plane1.position.set(
+        x + 10 * Math.cos(shift - Math.PI / 2),
+        y,
+        z - 10 * Math.sin(shift - Math.PI / 2)
+      );
+    }
+    if (shift >= Math.PI && shift < (Math.PI / 2) * 3) {
+      plane1.position.set(
+        x - 10 * Math.sin(shift - Math.PI),
+        y,
+        z - 10 * Math.cos(shift - Math.PI)
+      );
+    }
+    if (shift >= (Math.PI / 2) * 3) {
+      plane1.position.set(
+        x - 10 * Math.cos(shift - (Math.PI / 2) * 3),
+        y,
+        z + 10 * Math.sin(shift - (Math.PI / 2) * 3)
+      );
+    }
+
+    plane2.rotation.set(0, Math.PI / 2 + piece + shift, 0);
+    if (piece < Math.PI / 2) {
+      plane2.position.set(x + 10 * Math.sin(piece + shift), y, z + 10 * Math.cos(piece + shift));
+    }
+    if (piece >= Math.PI / 2 && piece < Math.PI) {
+      plane2.position.set(
+        x + 10 * Math.cos(piece + shift - Math.PI / 2),
+        y,
+        z - 10 * Math.sin(piece + shift - Math.PI / 2)
+      );
+    }
+    if (piece >= Math.PI && piece < (Math.PI / 2) * 3) {
+      plane2.position.set(
+        x - 10 * Math.sin(piece + shift - Math.PI),
+        y,
+        z - 10 * Math.cos(piece + shift - Math.PI)
+      );
+    }
+    if (piece >= (Math.PI / 2) * 3) {
+      plane2.position.set(
+        x - 10 * Math.cos(piece + shift - (Math.PI / 2) * 3),
+        y,
+        z + 10 * Math.sin(piece + shift - (Math.PI / 2) * 3)
+      );
+    }
   }
 
   calcPieces() {
@@ -107,6 +207,15 @@ export class PieTdChartComponent implements OnInit, OnDestroy {
         false,
         shift,
         this.pieces[index]
+      );
+      const angle = shift + this.pieces[index] / 2;
+      this.setSegmentPosition(segment, angle);
+      this.setPlanesPositionsAndRotations(
+        shift,
+        this.pieces[index],
+        this.planes[index].plane1,
+        this.planes[index].plane2,
+        segment
       );
       shift += this.pieces[index];
     });

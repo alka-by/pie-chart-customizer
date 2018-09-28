@@ -5,11 +5,11 @@ export class TeamsService {
   teamsChanged = new Subject<Team[]>();
 
   private teams: Team[] = [
-    new Team('DronBaton', 7, 'rgb(255, 99, 132)'),
-    new Team('Veterok', 2, 'rgb(255, 99, 132)'),
+    new Team('DronBaton', 4, 'rgb(255, 99, 132)'),
+    new Team('Veterok', 5, 'rgb(255, 99, 132)'),
     new Team('PropVoshki', 3, 'rgb(255, 99, 132)'),
-    new Team('BeeDro', 1, 'rgb(255, 99, 132)'),
-    new Team('Zadroni', 1, 'rgb(255, 99, 132)'),
+    new Team('BeeDro', 2, 'rgb(255, 99, 132)'),
+    new Team('Zadroni', 4, 'rgb(255, 99, 132)'),
     new Team('AronDonDron', 3, 'rgb(255, 99, 132)')
   ];
 
